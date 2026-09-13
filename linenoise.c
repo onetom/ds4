@@ -531,6 +531,7 @@ enum KEY_ACTION{
 	CTRL_F = 6,         /* Ctrl-f */
 	CTRL_H = 8,         /* Ctrl-h */
 	TAB = 9,            /* Tab */
+	CTRL_J = 10,        /* Ctrl-j, insert a newline */
 	CTRL_K = 11,        /* Ctrl+k */
 	CTRL_L = 12,        /* Ctrl+l */
 	ENTER = 13,         /* Enter */
@@ -2332,6 +2333,9 @@ char *linenoiseEditFeed(struct linenoiseState *l) {
     }
 
     switch(c) {
+    case CTRL_J:     /* ctrl-j, insert a newline without submitting. */
+        linenoiseEditInsert(l, "\n", 1);
+        break;
     case ENTER:    /* enter */
         history_len--;
         free(history[history_len]);

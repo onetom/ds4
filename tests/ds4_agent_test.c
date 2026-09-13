@@ -388,6 +388,11 @@ static void test_fragmented_terminal_input(void) {
     }
     AGENT_TEST_ASSERT(!strcmp(l.buf, "!aZ"));
     linenoiseEditClear(&l);
+    linenoiseEditFeedByte(&l, 'a');
+    AGENT_TEST_ASSERT(linenoiseEditFeedByte(&l, '\n') == linenoiseEditMore);
+    linenoiseEditFeedByte(&l, 'b');
+    AGENT_TEST_ASSERT(!strcmp(l.buf, "a\nb"));
+    linenoiseEditClear(&l);
     const char paste[] = "\x1b[200~one\r\n\xe4\xb8\xad\nthree\x1b[201~";
     for (size_t i = 0; i < sizeof(paste) - 1; i++) {
         AGENT_TEST_ASSERT(linenoiseEditFeedByte(&l, paste[i]) == linenoiseEditMore);
