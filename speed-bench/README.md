@@ -144,3 +144,16 @@ Start the server separately with an appropriate model, context and
 `--batched-session 8`. The report includes first-token and inter-token
 latency, request latency and throughput. Prompts use fresh nonces;
 `--shared-prefix` tests cache reuse instead.
+
+`serve_batch_ceiling.sh` walks that bench over a list of concurrencies against
+one running server to find where batching stops working instead of merely
+slowing down:
+
+```sh
+CONCURRENCY="1 2 4 8" ./speed-bench/serve_batch_ceiling.sh \
+  --base-url http://127.0.0.1:8001
+```
+
+It stops at the first step where any request fails and prints the largest
+concurrency that served cleanly. Run it on an otherwise idle server, and see the
+header of the script for why it does not pass `--ignore-eos`.
