@@ -84,7 +84,12 @@ change floating-point reduction order slightly. V4.1 sessions containing images
 use the ordered fallback.
 
 Long prefills yield to active decoders in bounded intervals, normally 128
-tokens. `--mixed-prefill-quantum N` changes that interval for testing.
+tokens. `--mixed-prefill-quantum N` changes that interval for testing. While
+nothing generates, prefill advances in 2048-token slices and
+`--prefill-quantum N` changes that. A longer slice means fewer, larger graph
+passes and better prefill throughput, at the cost of up to one slice of delay
+for a slot that became decode-ready in the middle of it; the graph still splits
+any slice at its own `--prefill-chunk`.
 Session-batched serving uses ordinary target decoding, except Qwen3.8 on
 Metal, where `--mtp` also batches speculative decoding. Its
 `--mtp-exact-sampling` mode uses ordinary batches for nonzero-temperature
